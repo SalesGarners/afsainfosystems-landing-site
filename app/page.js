@@ -8,6 +8,8 @@ import {
   BarChart3,
   ArrowRight,
   Phone,
+  Mail,
+  MapPin,
 } from "lucide-react";
 
 // ─── CONSTANTS ───────────────────────────────────────────────────────────────
@@ -42,6 +44,7 @@ const SERVICES = [
     description:
       "End-to-end AWS consulting with certified architects. Infrastructure migrations, DevOps pipelines, and cloud-native architecture.",
     accent: "#FF9900",
+    href: "/services/aws-cloud",
     tags: ["Migration", "DevOps", "Architecture"],
   },
   {
@@ -50,6 +53,7 @@ const SERVICES = [
     description:
       "Global Oracle Managed Service Provider. Migrate, integrate and manage Oracle workloads across a true multi-cloud hybrid environment.",
     accent: "#F80000",
+    href: "/services/oracle-cloud",
     tags: ["OCI", "Hybrid", "Managed"],
   },
   {
@@ -58,6 +62,7 @@ const SERVICES = [
     description:
       "Custom cloud-native apps, legacy modernization and mobile development. Reduce operational costs by up to 30% with modern architectures.",
     accent: "#FF4081",
+    href: "/services/application-development",
     tags: ["Custom Apps", "Mobile", "Modernization"],
   },
   {
@@ -66,6 +71,7 @@ const SERVICES = [
     description:
       "Hadoop managed services, data preparation, discovery and analytics. Unlock the full potential of your enterprise data.",
     accent: "#F59E0B",
+    href: "/services/big-data",
     tags: ["Hadoop", "Python", "Analytics"],
   },
   {
@@ -74,6 +80,7 @@ const SERVICES = [
     description:
       "Full EBS lifecycle — implementations, upgrades, customizations and managed services. Maximize your Oracle investment.",
     accent: "#10B981",
+    href: "/services/oracle-ebs",
     tags: ["ERP", "Finance", "SCM", "HCM"],
   },
 ];
@@ -101,8 +108,8 @@ const TESTIMONIALS = [
 
 const PARTNERS = [
   { label: "AWS", logo: "/aws.png" },
-  { label: "Microsoft Azure", logo: null },
-  { label: "Google Cloud", logo: null },
+  { label: "Microsoft Azure", logo: "/azure.png" },
+  { label: "Google Cloud", logo: "/gcp.png" },
   { label: "Oracle", logo: "/oracle.png" },
 ];
 
@@ -121,20 +128,260 @@ const fadeUp = {
 
 // ─── HERO SECTION ────────────────────────────────────────────────────────────
 
+// ─── HERO ANIMATION COLUMN ───────────────────────────────────────────────────
+
+const ORBIT_OUTER = [
+  { label: "EC2", angle: 0, color: "#FF9900", x: 100.0, y: 50.0, ox: 100.0, oy: 50.0 },
+  { label: "S3", angle: 72, color: "#FF9900", x: 65.4508, y: 97.5528, ox: 65.4508, oy: 97.5528 },
+  { label: "Lambda", angle: 144, color: "#FF9900", x: 9.5492, y: 79.3893, ox: 9.5492, oy: 79.3893 },
+  { label: "RDS", angle: 216, color: "#FF9900", x: 9.5492, y: 20.6107, ox: 9.5492, oy: 20.6107 },
+  { label: "DevOps", angle: 288, color: "#FF9900", x: 65.4508, y: 2.4472, ox: 65.4508, oy: 2.4472 },
+];
+
+const ORBIT_MID = [
+  { label: "Finance", angle: 30, color: "#E040FB", x: 93.3013, y: 75.0, ox: 93.3013, oy: 75.0 },
+  { label: "SCM", angle: 150, color: "#E040FB", x: 6.6987, y: 75.0, ox: 6.6987, oy: 75.0 },
+  { label: "HCM", angle: 270, color: "#E040FB", x: 50.0, y: 0.0, ox: 50.0, oy: 0.0 },
+];
+
+const ORBIT_INNER = [
+  { label: "React", angle: 0, color: "#FF4081", x: 100.0, y: 50.0, ox: 100.0, oy: 50.0 },
+  { label: "Node", angle: 120, color: "#FF4081", x: 25.0, y: 93.3013, ox: 25.0, oy: 93.3013 },
+  { label: "Docker", angle: 240, color: "#FF4081", x: 25.0, y: 6.6987, ox: 25.0, oy: 6.6987 },
+];
+
+function HeroAnimation() {
+  return (
+    <div className="relative w-full aspect-square max-w-[460px] mx-auto select-none">
+
+      {/* Ambient background glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(circle at 50% 50%, rgba(255,107,53,0.08) 0%, rgba(224,64,251,0.06) 40%, transparent 70%)",
+          filter: "blur(20px)",
+        }}
+      />
+
+      {/* ── Outer ring — AWS (orange) ── */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          inset: "2%",
+          border: "1px dashed rgba(255,153,0,0.3)",
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+      >
+        {ORBIT_OUTER.map((node) => {
+          const x = node.x;
+          const y = node.y;
+          return (
+            <motion.div
+              key={node.label}
+              className="absolute flex items-center justify-center"
+              style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%,-50%)" }}
+              animate={{ rotate: -360 }}
+              transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+            >
+              <motion.div
+                className="px-2.5 py-1 rounded-lg text-[10px] font-bold"
+                style={{
+                  background: "rgba(255,153,0,0.12)",
+                  border: "1px solid rgba(255,153,0,0.4)",
+                  color: "#FF9900",
+                  boxShadow: "0 0 12px rgba(255,153,0,0.2)",
+                }}
+                animate={{ boxShadow: ["0 0 8px rgba(255,153,0,0.15)", "0 0 18px rgba(255,153,0,0.45)", "0 0 8px rgba(255,153,0,0.15)"] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: node.angle / 144, ease: "easeInOut" }}
+              >
+                {node.label}
+              </motion.div>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+
+      {/* Outer ring connector lines */}
+      <svg className="absolute pointer-events-none" style={{ inset: "2%", width: "96%", height: "96%" }} viewBox="0 0 100 100">
+        {ORBIT_OUTER.map((node) => {
+          const ox = node.ox;
+          const oy = node.oy;
+          return (
+            <motion.line
+              key={node.label}
+              x1="50" y1="50" x2={ox} y2={oy}
+              stroke="rgba(255,153,0,0.12)"
+              strokeWidth="0.4"
+              strokeDasharray="2 3"
+              animate={{ opacity: [0.15, 0.5, 0.15] }}
+              transition={{ duration: 3, repeat: Infinity, delay: node.angle / 288, ease: "easeInOut" }}
+            />
+          );
+        })}
+      </svg>
+
+      {/* ── Mid ring — Oracle EBS (magenta) ── */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          inset: "18%",
+          border: "1px solid rgba(224,64,251,0.25)",
+        }}
+        animate={{ rotate: -360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      >
+        {ORBIT_MID.map((node) => {
+          const x = node.x;
+          const y = node.y;
+          return (
+            <motion.div
+              key={node.label}
+              className="absolute flex items-center justify-center"
+              style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%,-50%)" }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            >
+              <motion.div
+                className="px-2.5 py-1 rounded-lg text-[10px] font-bold"
+                style={{
+                  background: "rgba(224,64,251,0.1)",
+                  border: "1px solid rgba(224,64,251,0.4)",
+                  color: "#E040FB",
+                  boxShadow: "0 0 12px rgba(224,64,251,0.2)",
+                }}
+                animate={{ boxShadow: ["0 0 8px rgba(224,64,251,0.15)", "0 0 20px rgba(224,64,251,0.5)", "0 0 8px rgba(224,64,251,0.15)"] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: node.angle / 180, ease: "easeInOut" }}
+              >
+                {node.label}
+              </motion.div>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+
+      {/* Mid ring connector lines */}
+      <svg className="absolute pointer-events-none" style={{ inset: "18%", width: "64%", height: "64%" }} viewBox="0 0 100 100">
+        {ORBIT_MID.map((node) => {
+          const ox = node.ox;
+          const oy = node.oy;
+          return (
+            <motion.line
+              key={node.label}
+              x1="50" y1="50" x2={ox} y2={oy}
+              stroke="rgba(224,64,251,0.15)"
+              strokeWidth="0.5"
+              strokeDasharray="2 3"
+              animate={{ opacity: [0.15, 0.55, 0.15] }}
+              transition={{ duration: 2.8, repeat: Infinity, delay: node.angle / 270, ease: "easeInOut" }}
+            />
+          );
+        })}
+      </svg>
+
+      {/* ── Inner ring — App Dev (pink) ── */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          inset: "33%",
+          border: "1px dashed rgba(255,64,129,0.3)",
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 13, repeat: Infinity, ease: "linear" }}
+      >
+        {ORBIT_INNER.map((node) => {
+          const x = node.x;
+          const y = node.y;
+          return (
+            <motion.div
+              key={node.label}
+              className="absolute flex items-center justify-center"
+              style={{ left: `${x}%`, top: `${y}%`, transform: "translate(-50%,-50%)" }}
+              animate={{ rotate: -360 }}
+              transition={{ duration: 13, repeat: Infinity, ease: "linear" }}
+            >
+              <motion.div
+                className="px-2 py-0.5 rounded-md text-[9px] font-bold"
+                style={{
+                  background: "rgba(255,64,129,0.1)",
+                  border: "1px solid rgba(255,64,129,0.4)",
+                  color: "#FF4081",
+                  boxShadow: "0 0 10px rgba(255,64,129,0.2)",
+                }}
+                animate={{ boxShadow: ["0 0 6px rgba(255,64,129,0.15)", "0 0 16px rgba(255,64,129,0.5)", "0 0 6px rgba(255,64,129,0.15)"] }}
+                transition={{ duration: 2, repeat: Infinity, delay: node.angle / 240, ease: "easeInOut" }}
+              >
+                {node.label}
+              </motion.div>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+
+      {/* Pulse rings */}
+      {[0, 0.7, 1.4].map((delay, i) => (
+        <motion.div
+          key={i}
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{ border: "1px solid rgba(255,107,53,0.12)" }}
+          animate={{ scale: [1, 1.06, 1], opacity: [0.25, 0, 0.25] }}
+          transition={{ duration: 3.5, repeat: Infinity, delay, ease: "easeInOut" }}
+        />
+      ))}
+
+      {/* ── Centre badge ── */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <motion.div
+          className="relative flex flex-col items-center justify-center w-24 h-24 rounded-full"
+          style={{
+            background: "rgba(255,255,255,0.92)",
+            border: "2px solid rgba(255,107,53,0.35)",
+            boxShadow: "0 0 48px rgba(255,107,53,0.18), 0 0 24px rgba(224,64,251,0.12)",
+          }}
+          animate={{ scale: [1, 1.04, 1] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Image
+            src="/afsa-logo.png"
+            alt="AFSA Infosystems"
+            width={72}
+            height={36}
+            className="w-14 h-auto object-contain"
+          />
+        </motion.div>
+      </div>
+
+      {/* Legend */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center gap-4">
+        {[
+          { label: "AWS Cloud", color: "#FF9900" },
+          { label: "Oracle EBS", color: "#E040FB" },
+          { label: "App Dev", color: "#FF4081" },
+        ].map((item) => (
+          <div key={item.label} className="flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full" style={{ background: item.color, boxShadow: `0 0 6px ${item.color}` }} />
+            <span className="text-[9px] font-medium text-gray-400">{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
-      {/* Soft warm gradient blobs */}
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-white">
+      {/* Background blobs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full opacity-15"
+          className="absolute -top-40 left-1/4 w-[700px] h-[600px] rounded-full opacity-10"
           style={{
             background: "radial-gradient(ellipse at center, #FF6B35 0%, #E040FB 50%, transparent 75%)",
             filter: "blur(80px)",
           }}
         />
         <div
-          className="absolute top-20 left-1/2 -translate-x-1/2 w-[400px] h-[300px] rounded-full opacity-10"
+          className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full opacity-8"
           style={{
             background: "radial-gradient(ellipse at center, #FFCA28 0%, transparent 70%)",
             filter: "blur(60px)",
@@ -142,7 +389,11 @@ function HeroSection() {
         />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-28">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-28 pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+          {/* Left — text content */}
+          <div className="text-left">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -201,7 +452,7 @@ function HeroSection() {
             <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
           </a>
           <a
-            href="/services/cloud-computing"
+            href="/services/aws-cloud"
             className="inline-flex items-center gap-2 px-8 py-3.5 border border-gray-200 text-gray-600 font-medium text-sm rounded-xl hover:bg-gray-50 hover:text-gray-900 transition-all"
           >
             Explore Services
@@ -212,7 +463,7 @@ function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7, duration: 0.6 }}
-          className="mt-20 flex items-center justify-center gap-3 flex-wrap"
+          className="mt-16 flex items-center justify-start gap-3 flex-wrap"
         >
           <span className="text-xs text-gray-400 uppercase tracking-widest mr-2">
             Trusted Partners
@@ -228,7 +479,19 @@ function HeroSection() {
               {p.label}
             </span>
           ))}
-        </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Right — animation */}
+          <motion.div
+            initial={{ opacity: 0, x: 32 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+            className="hidden lg:block"
+          >
+            <HeroAnimation />
+          </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -278,13 +541,14 @@ function ServicesSection() {
           {SERVICES.map((service, i) => {
             const Icon = service.icon;
             return (
-              <motion.div
+              <motion.a
+                href={service.href}
                 key={service.title}
                 variants={fadeUp}
                 initial="hidden"
                 animate={inView ? "visible" : "hidden"}
                 custom={i * 0.07}
-                className="group bg-white border border-gray-100 rounded-2xl p-6 hover:border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer"
+                className="group bg-white border border-gray-100 rounded-2xl p-6 hover:border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer block"
               >
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
@@ -331,7 +595,7 @@ function ServicesSection() {
                 >
                   Learn More <ArrowRight size={11} />
                 </span>
-              </motion.div>
+              </motion.a>
             );
           })}
         </div>
